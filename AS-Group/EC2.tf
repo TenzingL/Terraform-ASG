@@ -53,7 +53,6 @@ resource "aws_lb" "app-lb" {
   //security_groups = [aws_security_group.app-SG.id] use if launch template doesn't have SG
   subnets = var.publicSNs[*].id
   enable_deletion_protection = false
-
   tags = { name = "app-lb" }
 }
 resource "aws_lb_target_group" "app-tg" {
