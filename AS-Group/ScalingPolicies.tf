@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "low-cpu-usage" {
     alarm_name = "low-cpu-usage"
     comparison_operator = "LessThanThreshold"
     threshold = 20
-    period = 40 //How many seconds until the metric is checked
+    period = 60 //How many seconds until the metric is checked
     evaluation_periods = 2 //How many times the checked metric must exceed threshold to proc
     metric_name = "CPUUtilization"
     namespace = "AWS/EC2" //Which service the metric is associated with
