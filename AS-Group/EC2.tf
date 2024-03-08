@@ -35,6 +35,7 @@ resource "aws_launch_template" "app" {
     lifecycle {
       create_before_destroy = true //Ensures higher availability incase of updates to the launch template
     }
+    user_data = filebase64("setup-jenkins.sh")
     tags = {name = "launch template"}
 }
 resource "aws_autoscaling_group" "AS-group" {
