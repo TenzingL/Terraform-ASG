@@ -22,3 +22,7 @@ resource "aws_subnet" "PrivateSNs" {
     map_public_ip_on_launch = false
     tags = { name = "PrivateSN-${count.index+1}"}
 }
+
+output "privateSNs" {
+  value = aws_subnet.PrivateSNs
+}

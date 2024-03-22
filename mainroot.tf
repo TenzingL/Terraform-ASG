@@ -8,3 +8,8 @@ module "AS-Group" {
   vpc-id = module.Network.mainvpc
   publicSNs = module.Network.publicSNs
 }
+module "Database" {
+  source = "./Database"
+  privateSNs = module.Network.privateSNs
+  vpc-id = module.Network.mainvpc
+}

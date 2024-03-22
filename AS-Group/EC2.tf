@@ -7,6 +7,12 @@ resource "aws_security_group" "app-SG" {
         protocol = "tcp"
         cidr_blocks = [ "0.0.0.0/0" ]
     }
+    ingress {
+      from_port = 3306
+      to_port = 3306
+      protocol = "tcp"
+      cidr_blocks = [ "0.0.0.0/0" ]
+    }
     egress {
         from_port = 0
         to_port = 0
@@ -46,6 +52,7 @@ resource "aws_autoscaling_group" "AS-group" {
     id = aws_launch_template.app.id
     version = "$Latest"
   }
+  target_group_arns = [aws_lb_target_group.app-tg.arn]
 }
 resource "aws_lb" "app-lb" {
   name = "app-lb"
@@ -60,7 +67,7 @@ resource "aws_lb_target_group" "app-tg" {
   name = "app-tg"
   port = 80
   protocol = "HTTP"
-  target_type = "ip"
+  target_type = "instance"
   vpc_id = var.vpc-id
 }
 resource "aws_lb_listener" "lb-listener" {
