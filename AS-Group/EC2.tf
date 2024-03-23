@@ -20,6 +20,9 @@ resource "aws_security_group" "app-SG" {
         cidr_blocks = [ "0.0.0.0/0" ]
     }
 }
+output "app-SG-id" {
+  value = aws_security_group.app-SG.id
+}
 resource "tls_private_key" "private-key" {
   algorithm = "RSA"
   rsa_bits = 4096
@@ -41,7 +44,9 @@ resource "aws_launch_template" "app" {
     lifecycle {
       create_before_destroy = true //Ensures higher availability incase of updates to the launch template
     }
-    user_data = filebase64("setup-jenkins.sh")
+    user_data = base64encode(templatefile("${path.module}/scripts/db-connect.sh.tpl", {
+    rds_endpoint = var.endpoint}))
+
     tags = {name = "launch template"}
 }
 resource "aws_autoscaling_group" "AS-group" {

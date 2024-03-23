@@ -7,9 +7,11 @@ module "AS-Group" {
   source = "./AS-Group"
   vpc-id = module.Network.mainvpc
   publicSNs = module.Network.publicSNs
+  endpoint = module.Database.endpoint
 }
 module "Database" {
   source = "./Database"
   privateSNs = module.Network.privateSNs
   vpc-id = module.Network.mainvpc
+  app-sg-id = module.AS-Group.app-SG-id
 }

@@ -5,7 +5,8 @@ resource "aws_security_group" "DB-SG" {
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
+    //cidr_blocks = [ "0.0.0.0/0" ]
+    security_groups = [ var.app-sg-id ]
   }
   egress {
     from_port = 0
@@ -17,9 +18,9 @@ resource "aws_security_group" "DB-SG" {
 resource "aws_db_subnet_group" "DB-SN-Group" {
   name = "my-db-group"
   subnet_ids = var.privateSNs[*].id
-
   tags = { name = "db-group"}
 }
+
 resource "aws_db_instance" "Database" {
     allocated_storage = 20
     engine = "mysql"
@@ -29,8 +30,10 @@ resource "aws_db_instance" "Database" {
     password = "password"
     publicly_accessible = false
     skip_final_snapshot = true //set false if backup needed on destroy
-    tags = { name = "mydatabase" }
-    
+    tags = { name = "mydatabase" } 
     vpc_security_group_ids = [aws_security_group.DB-SG.id]
     db_subnet_group_name = aws_db_subnet_group.DB-SN-Group.name
+}
+output "endpoint" {
+  value = aws_db_instance.Database.endpoint
 }
