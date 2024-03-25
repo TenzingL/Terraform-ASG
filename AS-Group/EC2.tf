@@ -44,8 +44,8 @@ resource "aws_launch_template" "app" {
     lifecycle {
       create_before_destroy = true //Ensures higher availability incase of updates to the launch template
     }
-    user_data = base64encode(templatefile("${path.module}/scripts/db-connect.sh.tpl", {
-    rds_endpoint = var.endpoint}))
+    user_data = base64encode(templatefile("${path.module}/scripts/db-connect.shtpl", {
+      rds_endpoint = var.endpoint }))
 
     tags = {name = "launch template"}
 }
