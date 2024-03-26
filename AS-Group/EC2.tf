@@ -44,8 +44,20 @@ resource "aws_launch_template" "app" {
     lifecycle {
       create_before_destroy = true //Ensures higher availability incase of updates to the launch template
     }
-    user_data = base64encode(templatefile("${path.module}/scripts/db-connect.shtpl", {
-      rds_endpoint = var.endpoint }))
+    //user_data = base64encode(templatefile("${path.module}/scripts/db-connect.shtpl", {
+    //  rds_endpoint = var.endpoint })) //Fix this later
+    user_data = <<-EOF
+  #!/bin/bash
+  yum update -y
+  yum install mariadb105 -y
+  export endpoint="${rds_endpoint}"
+  cat > ~/db-connect.sh <<'EOF2'
+  #!/bin/bash
+  mysql -h \$endpoint -u admin -p
+  EOF2
+  chmod +x ~/db-connect.sh
+EOF
+//Will swap to using .tpl instead
 
     tags = {name = "launch template"}
 }

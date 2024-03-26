@@ -4,6 +4,7 @@ provider "aws" {
     //shared_credentials_files = [ "C:\\Users\\tenzi\\.aws\\credentials.txt" ]
   
 }
+
 provider "tls" {
   
 }
